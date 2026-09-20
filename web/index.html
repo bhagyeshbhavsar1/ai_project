@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐾</text></svg>" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VetAssist - Veterinary Diagnosis Support Expert System</title>
+    <meta name="description" content="Intelligent rule-based expert system for canine and feline triage using forward and backward chaining AI." />
+    
+    <!-- Typography: Khand Bold (Headings) & Switzer Regular (Body) -->
+    <link rel="preconnect" href="https://api.fontshare.com" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Fontshare Switzer (Regular 400, Medium 500, SemiBold 600, Bold 700) -->
+    <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" rel="stylesheet" />
+    <!-- Fontshare Khand + Google Fonts Khand (Bold 700, SemiBold 600, Medium 500) -->
+    <link href="https://api.fontshare.com/v2/css?f[]=khand@500,600,700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Khand:wght@500;600;700&display=swap" rel="stylesheet" />
+
+    <link rel="stylesheet" href="/src/styles/main.css" />
+  </head>
+  <body>
+    <div id="app-container">
+      <!-- Fixed Upper-Left Corner Hamburger Menu Button -->
+      <button class="upper-left-hamburger" id="sidebar-toggle-btn" aria-label="Toggle Navigation Menu" title="Toggle Navigation Menu">
+        <span class="hamburger-bar bar-1"></span>
+        <span class="hamburger-bar bar-2"></span>
+        <span class="hamburger-bar bar-3"></span>
+      </button>
+
+      <!-- Left Sidebar Navigation -->
+      <aside class="app-sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <!-- Space for upper-left hamburger button -->
+          <div class="sidebar-header-spacer"></div>
+          <div class="sidebar-brand-text">
+            <span class="brand-title">VetAssist</span>
+            <span class="brand-subtitle">Veterinary Diagnosis Support</span>
+          </div>
+        </div>
+
+        <nav class="sidebar-nav">
+          <a class="nav-item active" data-view="home" id="nav-home">
+            <span class="nav-icon">🏠</span>
+            <span>Home</span>
+          </a>
+          <a class="nav-item" data-view="symptom-checker" id="nav-symptom-checker">
+            <span class="nav-icon">🩺</span>
+            <span>Symptom Checker</span>
+          </a>
+          <a class="nav-item" data-view="history" id="nav-history">
+            <span class="nav-icon">🕒</span>
+            <span>Diagnosis History</span>
+          </a>
+          <a class="nav-item" data-view="knowledge-base" id="nav-knowledge-base">
+            <span class="nav-icon">📖</span>
+            <span>Knowledge Base</span>
+          </a>
+          <a class="nav-item" data-view="care-guide" id="nav-care-guide">
+            <span class="nav-icon">📋</span>
+            <span>Pet Care Guide</span>
+          </a>
+          <a class="nav-item" data-view="settings" id="nav-settings">
+            <span class="nav-icon">⚙️</span>
+            <span>Settings</span>
+          </a>
+        </nav>
+
+        <div class="sidebar-footer">
+          "For healthier happier pets."
+        </div>
+      </aside>
+
+      <!-- Main App Viewport -->
+      <main class="app-viewport" id="app-viewport">
+        <!-- Top Navbar (Search bar and Profile SK, clean layout) -->
+        <header class="top-navbar">
+          <div class="top-nav-left">
+            <div class="top-nav-left-spacer" id="nav-left-spacer"></div>
+            <!-- Global Search Bar -->
+            <div class="search-wrapper">
+              <span class="search-icon">🔍</span>
+              <input 
+                type="text" 
+                class="search-input" 
+                id="global-search-input" 
+                placeholder="Search anything (symptoms, diseases, rules)..." 
+              />
+            </div>
+          </div>
+
+          <!-- Right User Profile Avatar SK -->
+          <div class="top-nav-right">
+            <div class="user-avatar-badge" title="User Profile: SK">
+              SK
+            </div>
+          </div>
+        </header>
+
+        <!-- Dynamic Main Content View -->
+        <div class="app-content" id="main-content-view">
+          <!-- Views render dynamically here with page transition animations -->
+        </div>
+      </main>
+    </div>
+
+    <!-- Script Entrypoint -->
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

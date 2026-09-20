@@ -1,0 +1,23 @@
+# Dependencies
+node_modules/
+web/node_modules/
+
+# Production builds
+dist/
+web/dist/
+
+# Python cache & tests
+__pycache__/
+*/__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Environment & OS files
+.env
+.env.local
+.DS_Store
+Thumbs.db
+*.log
