@@ -5,14 +5,15 @@
  * - Sliding background images covering the full width of the hero
  * - Glassmorphic typography & interactive CTA controls on top
  * - Transparent navbar integration
- * - Multi-species veterinary triage showcase
+ * - Forward vs Backward comparison card (Task 21)
+ * - Pausable hero carousel & reduced-motion respect (Task 33)
  */
 
 export function renderHomeView(container, navigateTo) {
   const slides = [
     {
       image: "/assets/hero_pets.jpg",
-      badge: "🐾 Canine & Feline Diagnostic Triage",
+      badge: "🐾 Canine & Feline Health Check",
       title: "Compassionate Pet Health AI",
       subtitle: "Intelligent rule-based inference for dogs and cats with 100% transparent reasoning.",
       quote: "Same care. A healthier tomorrow."
@@ -20,7 +21,7 @@ export function renderHomeView(container, navigateTo) {
     {
       image: "/assets/clinic_care.jpg",
       badge: "⚙️ Forward Chaining (Data ➔ Conclusion)",
-      title: "From Observed Signs to Clinical Diagnosis",
+      title: "From Observed Signs to Possible Conditions",
       subtitle: "Evaluates multi-symptom clusters and chains secondary complications automatically.",
       quote: "Multi-Hop Chained Derivations"
     },
@@ -42,6 +43,9 @@ export function renderHomeView(container, navigateTo) {
 
   let currentSlide = 0;
   let autoPlayTimer = null;
+  // Task 33: respect reduced motion preferences
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let isPaused = prefersReducedMotion;
 
   function render() {
     container.innerHTML = `
@@ -66,13 +70,15 @@ export function renderHomeView(container, navigateTo) {
                 ${slides[currentSlide].subtitle}
               </p>
 
-              <div class="hero-actions-row">
+              <!-- Non-technical human-oriented action buttons -->
+              <div class="hero-actions-row" style="flex-wrap: wrap; gap: 12px;">
                 <button class="btn-hero-primary" id="hero-start-diag-btn">
-                  <span>Start Multi-Species Diagnosis</span>
+                  <span>🩺 Symptom Checker</span>
                   <span style="font-size: 18px;">&rarr;</span>
                 </button>
-                <button class="btn-hero-secondary" id="hero-explore-kb-btn">
-                  Explore Knowledge Base
+                <button class="btn-hero-secondary" id="hero-start-disease-btn" style="background: rgba(255, 255, 255, 0.2); border: 1.5px solid rgba(255, 255, 255, 0.45); color: white; display: flex; align-items: center; gap: 8px;">
+                  <span>💬 Interactive Diagnosis</span>
+                  <span style="font-size: 18px;">&rarr;</span>
                 </button>
               </div>
 
@@ -100,6 +106,63 @@ export function renderHomeView(container, navigateTo) {
                   `).join("")}
                 </div>
                 <button class="hero-slider-nav next" id="slider-next-btn" aria-label="Next Slide">&#8250;</button>
+                <!-- Task 33: Pausable hero carousel toggle -->
+                <button class="hero-slider-nav play-pause" id="slider-play-pause-btn" aria-label="${isPaused ? 'Resume Slideshow' : 'Pause Slideshow'}" title="${isPaused ? 'Play' : 'Pause'}">
+                  ${isPaused ? '▶' : '⏸'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Plain-language "Which Option Fits You?" comparison card -->
+        <section style="padding: 24px 36px 0 36px;">
+          <div class="feature-card-modern" style="border: 1.5px solid var(--card-border); background: #ffffff;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px;">
+              <span style="font-size: 22px;">⚖️</span>
+              <div>
+                <h2 style="font-size: 18px; font-weight: 700; color: #0f172a; margin: 0;">How would you like to start?</h2>
+                <p style="font-size: 12.5px; color: var(--text-muted); margin: 0;">Pick based on what you already know about your pet:</p>
+              </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px;">
+              <!-- Option 1: Forward Chaining -->
+              <div style="padding: 16px; background: #f0fdf4; border: 1.5px solid #86efac; border-radius: var(--radius-sm); display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                  <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <strong style="color: #065f46; font-size: 14.5px;">🩺 Option 1: I see symptoms</strong>
+                    <span class="rule-code-chip" style="font-size: 11px;">Symptoms &rarr; Illness</span>
+                  </div>
+                  <p style="font-size: 13.5px; color: #166534; font-weight: 600; margin-top: 4px;">
+                    "Tell me what illness this could be"
+                  </p>
+                  <p style="font-size: 12.5px; color: #475569; margin-top: 2px; line-height: 1.4;">
+                    Tick the signs you see in your pet and our engine checks every rule forward to find what fits.
+                  </p>
+                </div>
+                <button class="btn-primary-dark" id="home-card-forward-btn" style="padding: 7px 16px; font-size: 12.5px; margin-top: 12px; width: fit-content;">
+                  Open Symptom Checker &rarr;
+                </button>
+              </div>
+
+              <!-- Option 2: Backward Chaining -->
+              <div style="padding: 16px; background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: var(--radius-sm); display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                  <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <strong style="color: #1e40af; font-size: 14.5px;">💬 Option 2: I suspect a disease</strong>
+                    <span class="rule-code-chip" style="font-size: 11px;">Disease &rarr; Questions</span>
+                  </div>
+                  <p style="font-size: 13.5px; color: #1e3a8a; font-weight: 600; margin-top: 4px;">
+                    "Ask me questions to test a specific illness"
+                  </p>
+                  <p style="font-size: 12.5px; color: #475569; margin-top: 2px; line-height: 1.4;">
+                    Worried about Parvovirus, Colic, or another illness? We test that exact rule with guided questions.
+                  </p>
+                </div>
+                <button class="btn-primary-dark" id="home-card-backward-btn" style="padding: 7px 16px; font-size: 12.5px; margin-top: 12px; width: fit-content; background: #1e40af;">
+                  Start Interactive Diagnosis &rarr;
+                </button>
               </div>
             </div>
           </div>
@@ -112,7 +175,7 @@ export function renderHomeView(container, navigateTo) {
               <div class="feature-icon-circle">🩺</div>
               <div>
                 <h3 class="feature-card-heading">Two Reasoning Modes</h3>
-                <p class="feature-card-sub">Forward chaining (symptom &rarr; diagnosis) and backward chaining (goal &rarr; question).</p>
+                <p class="feature-card-sub">Forward chaining (symptom &rarr; condition) and backward chaining (condition &rarr; question).</p>
               </div>
             </div>
 
@@ -120,7 +183,7 @@ export function renderHomeView(container, navigateTo) {
               <div class="feature-icon-circle">📋</div>
               <div>
                 <h3 class="feature-card-heading">100% Explainable AI</h3>
-                <p class="feature-card-sub">Transparent audit trace showing fired rules, premises met, and clinical rationales.</p>
+                <p class="feature-card-sub">Step-by-step audit trace showing premises met, fired rules, and clinical citations.</p>
               </div>
             </div>
 
@@ -162,6 +225,7 @@ export function renderHomeView(container, navigateTo) {
   }
 
   function startTimer() {
+    if (isPaused) return;
     if (autoPlayTimer) clearInterval(autoPlayTimer);
     autoPlayTimer = setInterval(() => {
       goToSlide(currentSlide + 1);
@@ -180,26 +244,49 @@ export function renderHomeView(container, navigateTo) {
     const startBtn = container.querySelector("#hero-start-diag-btn");
     if (startBtn) startBtn.addEventListener("click", () => navigateTo("symptom-checker"));
 
+    const diseaseHeroBtn = container.querySelector("#hero-start-disease-btn");
+    if (diseaseHeroBtn) diseaseHeroBtn.addEventListener("click", () => navigateTo("interactive-diagnosis"));
+
+    const cardFwdBtn = container.querySelector("#home-card-forward-btn");
+    if (cardFwdBtn) cardFwdBtn.addEventListener("click", () => navigateTo("symptom-checker"));
+
+    const cardBwdBtn = container.querySelector("#home-card-backward-btn");
+    if (cardBwdBtn) cardBwdBtn.addEventListener("click", () => navigateTo("interactive-diagnosis"));
+
     const kbBtn = container.querySelector("#hero-explore-kb-btn");
     if (kbBtn) kbBtn.addEventListener("click", () => navigateTo("knowledge-base"));
 
     // Slider Controls
     const prevBtn = container.querySelector("#slider-prev-btn");
     const nextBtn = container.querySelector("#slider-next-btn");
+    const playPauseBtn = container.querySelector("#slider-play-pause-btn");
     const dots = container.querySelectorAll(".hero-slider-dot");
     const heroSection = container.querySelector("#cinematic-hero");
 
     if (prevBtn) {
       prevBtn.addEventListener("click", () => {
         goToSlide(currentSlide - 1);
-        startTimer();
+        if (!isPaused) startTimer();
       });
     }
 
     if (nextBtn) {
       nextBtn.addEventListener("click", () => {
         goToSlide(currentSlide + 1);
-        startTimer();
+        if (!isPaused) startTimer();
+      });
+    }
+
+    // Play/Pause button handler (Task 33)
+    if (playPauseBtn) {
+      playPauseBtn.addEventListener("click", () => {
+        isPaused = !isPaused;
+        if (isPaused) {
+          pauseTimer();
+        } else {
+          startTimer();
+        }
+        render();
       });
     }
 
@@ -207,18 +294,22 @@ export function renderHomeView(container, navigateTo) {
       dot.addEventListener("click", (e) => {
         const idx = parseInt(e.target.dataset.index, 10);
         goToSlide(idx);
-        startTimer();
+        if (!isPaused) startTimer();
       });
     });
 
     if (heroSection) {
-      heroSection.addEventListener("mouseenter", () => pauseTimer());
-      heroSection.addEventListener("mouseleave", () => startTimer());
+      heroSection.addEventListener("mouseenter", () => {
+        if (!isPaused) pauseTimer();
+      });
+      heroSection.addEventListener("mouseleave", () => {
+        if (!isPaused) startTimer();
+      });
     }
   }
 
   render();
-  startTimer();
+  if (!isPaused) startTimer();
 
   return () => {
     pauseTimer();

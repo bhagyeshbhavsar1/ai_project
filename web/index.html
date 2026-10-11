@@ -48,6 +48,10 @@
             <span class="nav-icon">🩺</span>
             <span>Symptom Checker</span>
           </a>
+          <a class="nav-item" data-view="interactive-diagnosis" id="nav-interactive-diagnosis">
+            <span class="nav-icon">💬</span>
+            <span>Interactive Diagnosis</span>
+          </a>
           <a class="nav-item" data-view="history" id="nav-history">
             <span class="nav-icon">🕒</span>
             <span>Diagnosis History</span>
@@ -84,22 +88,74 @@
                 type="text" 
                 class="search-input" 
                 id="global-search-input" 
-                placeholder="Search anything (symptoms, diseases, rules)..." 
+                placeholder="Search symptoms, conditions, rules..." 
+                autocomplete="off"
               />
+              <div class="search-results-dropdown" id="search-results-dropdown" style="display: none;"></div>
             </div>
           </div>
 
-          <!-- Right User Profile Avatar SK -->
+          <!-- Right User Profile / Help Trigger -->
           <div class="top-nav-right">
-            <div class="user-avatar-badge" title="User Profile: SK">
-              SK
-            </div>
+            <button class="user-avatar-badge" id="help-modal-trigger-btn" title="Need help? Click for quick guide" aria-label="Open Help Guide">
+              ?
+            </button>
           </div>
         </header>
 
         <!-- Dynamic Main Content View -->
         <div class="app-content" id="main-content-view">
           <!-- Views render dynamically here with page transition animations -->
+        </div>
+
+        <!-- Global Universal Footer Disclaimer (shown on every page) -->
+        <footer class="app-global-footer" id="app-global-footer">
+          <div class="global-footer-content">
+            <span class="footer-alert-icon">⚠️</span>
+            <span><strong>Educational Disclaimer:</strong> VetAssist is an educational triage tool, not a veterinary medical provider. It does not provide medical diagnoses. Always consult a licensed veterinarian for urgent signs, official diagnoses, and treatment.</span>
+          </div>
+        </footer>
+
+        <!-- Help Modal -->
+        <div class="help-modal-backdrop" id="help-modal-backdrop" style="display: none;">
+          <div class="help-modal-card">
+            <div class="help-modal-header">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 20px;">🐾</span>
+                <h3 style="font-size: 18px; font-weight: 700; margin: 0;">VetAssist Quick Help & Guide</h3>
+              </div>
+              <button class="help-modal-close" id="help-modal-close-btn" aria-label="Close Help">&times;</button>
+            </div>
+            <div class="help-modal-body">
+              <div class="help-section">
+                <h4 style="font-weight: 700; margin-bottom: 4px; color: var(--primary-green);">Which mode should I choose?</h4>
+                <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 6px;">
+                  <div style="padding: 8px 12px; background: #f8fafc; border-radius: 6px; border: 1px solid #e2e8f0;">
+                    <strong>🩺 Forward Chaining:</strong> <em>"I know the symptoms - tell me what it could be."</em><br/>
+                    Pick your animal, check the signs you see, and we check all rules to see what conditions match.
+                  </div>
+                  <div style="padding: 8px 12px; background: #f8fafc; border-radius: 6px; border: 1px solid #e2e8f0;">
+                    <strong>💬 Backward Chaining:</strong> <em>"I suspect a disease - ask me questions to check it."</em><br/>
+                    Pick a condition you are worried about, and we ask you step-by-step questions to prove or rule it out.
+                  </div>
+                </div>
+              </div>
+
+              <div class="help-section" style="margin-top: 14px;">
+                <h4 style="font-weight: 700; margin-bottom: 4px; color: #dc2626;">🚨 When to seek immediate emergency care</h4>
+                <p style="font-size: 13px; color: #475569; line-height: 1.5;">
+                  If your pet is struggling to breathe, unable to pee, has a hard swollen abdomen with retching, continuous bloody vomiting/diarrhea, or has collapsed, do NOT wait for an online tool. Rush to the nearest 24/7 veterinary hospital immediately.
+                </p>
+              </div>
+
+              <div class="help-section" style="margin-top: 14px;">
+                <h4 style="font-weight: 700; margin-bottom: 4px; color: var(--text-main);">Understanding Confidence</h4>
+                <p style="font-size: 13px; color: #475569; line-height: 1.5;">
+                  Confidence shows how strongly your symptom pattern points to a possible condition. It is a guide to assist veterinary discussion, not a guarantee.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </main>
     </div>

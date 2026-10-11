@@ -2,10 +2,12 @@
  * KnowledgeView.js
  * ================
  * Interactive Knowledge Base explorer displaying all veterinary rules,
- * conditions, conclusions, confidence factors, and clinical citations.
+ * conditions, conclusions, confidence factors, and clinical citations,
+ * using plain-language friendly symptom names.
  */
 
 import { VET_RULES } from '../engine/rulesData.js';
+import { getFriendlySymptomName } from '../utils/formatters.js';
 
 export function renderKnowledgeView(container, navigateTo) {
   let activeFilter = "all";
@@ -17,7 +19,10 @@ export function renderKnowledgeView(container, navigateTo) {
       const matchQuery = searchFilter === "" || 
         r.conclusion.toLowerCase().includes(searchFilter.toLowerCase()) ||
         r.id.toLowerCase().includes(searchFilter.toLowerCase()) ||
-        r.conditions.some(c => c.toLowerCase().includes(searchFilter.toLowerCase()));
+        r.conditions.some(c => 
+          c.toLowerCase().includes(searchFilter.toLowerCase()) ||
+          getFriendlySymptomName(c).toLowerCase().includes(searchFilter.toLowerCase())
+        );
       return matchPet && matchQuery;
     });
 
@@ -30,7 +35,7 @@ export function renderKnowledgeView(container, navigateTo) {
 
         <!-- Filter & Search Toolbar -->
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; gap: 16px; flex-wrap: wrap;">
-          <div style="display: flex; gap: 8px;">
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
             <button class="btn-secondary-outline ${activeFilter === 'all' ? 'active' : ''}" id="filter-all-btn" style="${activeFilter === 'all' ? 'background: var(--primary-green); color: white;' : ''}">
               All Rules (${VET_RULES.length})
             </button>
@@ -47,21 +52,21 @@ export function renderKnowledgeView(container, navigateTo) {
               type="text" 
               class="search-input" 
               id="rule-search-input" 
-              placeholder="Search rule or symptom..." 
+              placeholder="Search condition or sign..." 
               value="${searchFilter}"
             />
           </div>
         </div>
 
         <!-- Rules Table -->
-        <div class="table-card">
-          <table class="custom-table">
+        <div class="table-card" style="overflow-x: auto;">
+          <table class="custom-table" style="min-width: 750px;">
             <thead>
               <tr>
                 <th style="width: 70px;">Rule ID</th>
                 <th style="width: 80px;">Species</th>
-                <th>Antecedent (IF Conditions)</th>
-                <th>Consequent (THEN Conclusion)</th>
+                <th>Required Signs (IF)</th>
+                <th>Possible Condition (THEN)</th>
                 <th style="width: 100px;">Certainty</th>
                 <th style="width: 140px;">Severity</th>
               </tr>
@@ -70,10 +75,10 @@ export function renderKnowledgeView(container, navigateTo) {
               ${filteredRules.map(rule => `
                 <tr>
                   <td><span class="rule-code-chip" style="font-weight: 700;">${rule.id}</span></td>
-                  <td>${rule.pet_type === 'cat' ? '🐈 Cat' : rule.pet_type === 'dog' ? '🐕 Dog' : '🐾 Both'}</td>
+                  <td>${rule.pet_type === 'cat' ? '🐈 Cat' : rule.pet_type === 'dog' ? '🐕 Dog' : '🐾 ' + (rule.animal_name || 'Both')}</td>
                   <td>
                     <div style="font-size: 13px; line-height: 1.4;">
-                      ${rule.conditions.map(c => `<span style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px; margin-right: 4px; display: inline-block; margin-bottom: 2px;">${c}</span>`).join(" <strong>AND</strong> ")}
+                      ${rule.conditions.map(c => `<span style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px; margin-right: 4px; display: inline-block; margin-bottom: 2px;">${getFriendlySymptomName(c)}</span>`).join(" <strong>AND</strong> ")}
                     </div>
                   </td>
                   <td>
@@ -98,29 +103,42 @@ export function renderKnowledgeView(container, navigateTo) {
   }
 
   function bindEvents() {
-    container.querySelector("#filter-all-btn").addEventListener("click", () => {
-      activeFilter = "all";
-      render();
-    });
-    container.querySelector("#filter-dog-btn").addEventListener("click", () => {
-      activeFilter = "dog";
-      render();
-    });
-    container.querySelector("#filter-cat-btn").addEventListener("click", () => {
-      activeFilter = "cat";
-      render();
-    });
+    const btnAll = container.querySelector("#filter-all-btn");
+    if (btnAll) {
+      btnAll.addEventListener("click", () => {
+        activeFilter = "all";
+        render();
+      });
+    }
+
+    const btnDog = container.querySelector("#filter-dog-btn");
+    if (btnDog) {
+      btnDog.addEventListener("click", () => {
+        activeFilter = "dog";
+        render();
+      });
+    }
+
+    const btnCat = container.querySelector("#filter-cat-btn");
+    if (btnCat) {
+      btnCat.addEventListener("click", () => {
+        activeFilter = "cat";
+        render();
+      });
+    }
 
     const searchInput = container.querySelector("#rule-search-input");
-    searchInput.addEventListener("input", (e) => {
-      searchFilter = e.target.value;
-      render();
-      const inputNow = container.querySelector("#rule-search-input");
-      if (inputNow) {
-        inputNow.focus();
-        inputNow.setSelectionRange(searchFilter.length, searchFilter.length);
-      }
-    });
+    if (searchInput) {
+      searchInput.addEventListener("input", (e) => {
+        searchFilter = e.target.value;
+        render();
+        const inputNow = container.querySelector("#rule-search-input");
+        if (inputNow) {
+          inputNow.focus();
+          inputNow.setSelectionRange(searchFilter.length, searchFilter.length);
+        }
+      });
+    }
   }
 
   render();

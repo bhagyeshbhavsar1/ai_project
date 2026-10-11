@@ -3,6 +3,8 @@
 > **Rule-Based Artificial Intelligence with Forward and Backward Chaining**  
 > Educational veterinary triage assistant for canine and feline symptom assessment.
 
+📚 **[Click Here for Full Dashboard Guide & Professor Presentation Walkthrough](HOW_TO_USE_DASHBOARD_AND_EXPLAIN_TO_PROFESSOR.md)** (Explains everything in simple, easy-to-understand language + includes 5-minute presentation script and Q&A answers).
+
 ---
 
 ## Features

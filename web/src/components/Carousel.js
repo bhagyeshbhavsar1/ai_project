@@ -133,6 +133,9 @@ export class HeroCarousel {
   }
 
   startAutoPlay() {
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return;
+    }
     if (this.timer) clearInterval(this.timer);
     this.timer = setInterval(() => {
       this.next();
